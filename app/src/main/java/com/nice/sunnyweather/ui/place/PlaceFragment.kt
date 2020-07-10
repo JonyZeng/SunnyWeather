@@ -1,5 +1,6 @@
 package com.nice.sunnyweather.ui.place
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nice.sunnyweather.R
 import com.nice.sunnyweather.SunnyWeatherApplication
+import com.nice.sunnyweather.ui.weather.WeatherActivity
 import com.nice.sunnyweather.util.LogUtil
 import com.nice.sunnyweather.util.showToast
 import kotlinx.android.synthetic.main.fragment_place.*
@@ -23,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_place.*
  * A simple [Fragment] subclass.
  */
 class PlaceFragment : Fragment() {
-    private val viewModel by lazy { ViewModelProviders.of(this).get(PlaceViewModel::class.java) }
+    val viewModel by lazy { ViewModelProviders.of(this).get(PlaceViewModel::class.java) }
     private lateinit var adapter: PlaceAdapter
 
     override fun onCreateView(
@@ -34,6 +36,18 @@ class PlaceFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        LogUtil.i("-----", ":${viewModel.isPlaceSaved()}")
+        if (viewModel.isPlaceSaved()) {
+            val place = viewModel.getSavedPlace()
+            val intent = Intent(context, WeatherActivity::class.java).apply {
+                putExtra("location_lng", place.location.lng)
+                putExtra("location_lat", place.location.lat)
+                putExtra("place_name", place.name)
+            }
+            startActivity(intent)
+            activity?.finish()
+            return
+        }
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
         adapter = PlaceAdapter(this, viewModel.placeList)
