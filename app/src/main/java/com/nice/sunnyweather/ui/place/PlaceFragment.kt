@@ -14,6 +14,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nice.sunnyweather.R
+import com.nice.sunnyweather.SunnyWeatherApplication
+import com.nice.sunnyweather.util.LogUtil
+import com.nice.sunnyweather.util.showToast
 import kotlinx.android.synthetic.main.fragment_place.*
 
 /**
